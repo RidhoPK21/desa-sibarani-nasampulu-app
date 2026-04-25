@@ -1,59 +1,69 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../features/auth/providers/auth_provider.dart';
-// Note: Nanti kamu import file layout dan screen di sini
-import '../../features/public/beranda/screens/beranda_screen.dart';
-import '../../shared/layouts/public_layout.dart';
-import '../../shared/layouts/admin_layout.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../features/auth/providers/auth_provider.dart';
+import '../../features/public/beranda/screens/beranda_screen.dart';
+import '../../presentation/screens/admin/idm_admin_screen.dart';
+import '../../presentation/screens/auth/login_screen.dart';
+import '../../presentation/screens/idm/idm_screen.dart';
+import '../../shared/layouts/admin_layout.dart';
+import '../../shared/layouts/public_layout.dart';
 
 final rootNavigatorKey = GlobalKey<NavigatorState>();
 final publicShellKey = GlobalKey<NavigatorState>();
 final adminShellKey = GlobalKey<NavigatorState>();
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final authState = ref.watch(authProvider); // Pantau status login
-
   return GoRouter(
     navigatorKey: rootNavigatorKey,
     initialLocation: '/',
-
-    // 🔥 SATPAM ROUTER (Redirect Guard)
-    // Jika user mencoba buka '/admin' tapi belum login, tendang ke '/'
-    redirect: (context, state) {
-      final isGoingToAdmin = state.uri.toString().startsWith('/admin');
-      if (isGoingToAdmin && !authState) {
-        return '/'; // Tendang ke Beranda Publik
-      }
-      return null; // Lanjutkan perjalanan
-    },
-
     routes: [
-      // ================= CANGKANG PUBLIK =================
       ShellRoute(
         navigatorKey: publicShellKey,
-        builder: (context, state, child) => PublicLayout(child: child), // Harus kamu buat file UI-nya
+        builder: (context, state, child) =>
+            PublicLayout(location: state.uri.path, child: child),
         routes: [
           GoRoute(
             path: '/',
-            builder: (context, state) => const BerandaScreen(), // Panggil layar uji coba kita
+            builder: (context, state) => const BerandaScreen(),
           ),
+          GoRoute(path: '/idm', builder: (context, state) => const IdmScreen()),
         ],
       ),
-
-      // ================= LOGIN RAHASIA =================
       GoRoute(
-          path: '/login-rahasia',
-          builder: (context, state) => const Scaffold(body: Center(child: Text('Halaman Login Admin')))
+        path: '/login-rahasia',
+        builder: (context, state) => Consumer(
+          builder: (context, ref, _) {
+            return LoginScreen(
+              onLogin: () async {
+                await ref.read(authProvider.notifier).login('demo-token');
+                if (!context.mounted) return;
+                context.go('/admin');
+              },
+            );
+          },
+        ),
       ),
-
-      // ================= CANGKANG ADMIN =================
       ShellRoute(
         navigatorKey: adminShellKey,
-        builder: (context, state, child) => AdminLayout(child: child), // Harus kamu buat file UI-nya
+        builder: (context, state, child) => AdminLayout(child: child),
         routes: [
-          GoRoute(path: '/admin', builder: (context, state) => const Scaffold(body: Center(child: Text('Dashboard Admin')))),
+          GoRoute(
+            path: '/admin',
+            builder: (context, state) => const Scaffold(
+              body: Center(
+                child: Text(
+                  'Dashboard Admin\nPilih menu Kelola IDM dari drawer.',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+          GoRoute(
+            path: '/admin/idm',
+            builder: (context, state) => const IdmAdminScreen(),
+          ),
         ],
       ),
     ],
