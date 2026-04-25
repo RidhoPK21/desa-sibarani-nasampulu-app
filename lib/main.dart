@@ -21,6 +21,7 @@ class DesaSibaraniApp extends ConsumerWidget {
 
     return MaterialApp.router(
       title: 'Desa Sibarani',
+      debugShowCheckedModeBanner: false, // Menghapus tulisan DEBUG
       theme: ThemeData(
         primaryColor: const Color(0xFF4EA674), // Warna hijau desa
       ),

@@ -2,56 +2,46 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/auth/providers/auth_provider.dart';
-// Note: Nanti kamu import file layout dan screen di sini
-import '../../features/public/beranda/screens/beranda_screen.dart';
+import '../../features/public/beranda/screens/berita_screen.dart';
+import '../../features/public/beranda/screens/beranda_screen.dart'; // Import BerandaScreen lama
 import '../../shared/layouts/public_layout.dart';
 import '../../shared/layouts/admin_layout.dart';
-
 
 final rootNavigatorKey = GlobalKey<NavigatorState>();
 final publicShellKey = GlobalKey<NavigatorState>();
 final adminShellKey = GlobalKey<NavigatorState>();
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final authState = ref.watch(authProvider); // Pantau status login
+  final authState = ref.watch(authProvider);
 
   return GoRouter(
     navigatorKey: rootNavigatorKey,
     initialLocation: '/',
 
-    // 🔥 SATPAM ROUTER (Redirect Guard)
-    // Jika user mencoba buka '/admin' tapi belum login, tendang ke '/'
-    redirect: (context, state) {
-      final isGoingToAdmin = state.uri.toString().startsWith('/admin');
-      if (isGoingToAdmin && !authState) {
-        return '/'; // Tendang ke Beranda Publik
-      }
-      return null; // Lanjutkan perjalanan
-    },
-
     routes: [
-      // ================= CANGKANG PUBLIK =================
       ShellRoute(
         navigatorKey: publicShellKey,
-        builder: (context, state, child) => PublicLayout(child: child), // Harus kamu buat file UI-nya
+        builder: (context, state, child) => PublicLayout(child: child),
         routes: [
           GoRoute(
             path: '/',
-            builder: (context, state) => const BerandaScreen(), // Panggil layar uji coba kita
+            builder: (context, state) => const BerandaScreen(), // Halaman Beranda
+          ),
+          GoRoute(
+            path: '/berita',
+            builder: (context, state) => const BeritaScreen(), // Halaman Berita
           ),
         ],
       ),
 
-      // ================= LOGIN RAHASIA =================
       GoRoute(
           path: '/login-rahasia',
           builder: (context, state) => const Scaffold(body: Center(child: Text('Halaman Login Admin')))
       ),
 
-      // ================= CANGKANG ADMIN =================
       ShellRoute(
         navigatorKey: adminShellKey,
-        builder: (context, state, child) => AdminLayout(child: child), // Harus kamu buat file UI-nya
+        builder: (context, state, child) => AdminLayout(child: child),
         routes: [
           GoRoute(path: '/admin', builder: (context, state) => const Scaffold(body: Center(child: Text('Dashboard Admin')))),
         ],
