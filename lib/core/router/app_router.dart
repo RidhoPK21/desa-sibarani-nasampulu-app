@@ -1,9 +1,11 @@
+// lib/core/router/app_router.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/auth/providers/auth_provider.dart';
 import '../../features/public/beranda/screens/beranda_screen.dart';
+import '../../features/public/kegiatan/screens/kegiatan_screen.dart'; // ← IMPORT BARU
 import '../../presentation/screens/admin/idm_admin_screen.dart';
 import '../../presentation/screens/auth/login_screen.dart';
 import '../../presentation/screens/idm/idm_screen.dart';
@@ -19,6 +21,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     navigatorKey: rootNavigatorKey,
     initialLocation: '/',
     routes: [
+      // ── Public Shell ──────────────────────────────────────────────
       ShellRoute(
         navigatorKey: publicShellKey,
         builder: (context, state, child) =>
@@ -28,9 +31,19 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/',
             builder: (context, state) => const BerandaScreen(),
           ),
-          GoRoute(path: '/idm', builder: (context, state) => const IdmScreen()),
+          GoRoute(
+            path: '/idm',
+            builder: (context, state) => const IdmScreen(),
+          ),
+          // ── Route Kegiatan (BARU) ─────────────────────────────────
+          GoRoute(
+            path: '/kegiatan',
+            builder: (context, state) => const KegiatanScreen(),
+          ),
         ],
       ),
+
+      // ── Login ─────────────────────────────────────────────────────
       GoRoute(
         path: '/login-rahasia',
         builder: (context, state) => Consumer(
@@ -45,6 +58,8 @@ final routerProvider = Provider<GoRouter>((ref) {
           },
         ),
       ),
+
+      // ── Admin Shell ───────────────────────────────────────────────
       ShellRoute(
         navigatorKey: adminShellKey,
         builder: (context, state, child) => AdminLayout(child: child),
