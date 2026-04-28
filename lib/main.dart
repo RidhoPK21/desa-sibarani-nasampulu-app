@@ -1,28 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'core/theme/app_theme.dart';
-import 'core/router/app_router.dart';
+import 'screens/beranda_screen.dart';
 
-void main() {
-  runApp(
-    // Wajib dibungkus ProviderScope agar Riverpod menyala
-    const ProviderScope(child: DesaSibaraniApp()),
-  );
-}
+void main() => runApp(const MyApp());
 
-class DesaSibaraniApp extends ConsumerWidget {
-  const DesaSibaraniApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // Ambil konfigurasi router yang sudah kita buat
-    final router = ref.watch(routerProvider);
-
-    return MaterialApp.router(
-      title: 'Desa Sibarani',
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Desa Sibarani Nasampulu',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      routerConfig: router,
+      theme: ThemeData(
+        scaffoldBackgroundColor: const Color(0xFF3D8B6E),
+      ),
+      home: const BerandaScreen(),
     );
   }
 }
