@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 class DemografiSection extends StatelessWidget {
@@ -27,8 +28,10 @@ class DemografiSection extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20)),
               padding: const EdgeInsets.symmetric(vertical: 12),
             ),
-            child: const Text('Lihat Detail Infografis Publik',
-              style: TextStyle(color: Colors.white)),
+            child: const Text(
+              'Lihat Detail Infografis Publik',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ),
       ],
@@ -36,6 +39,7 @@ class DemografiSection extends StatelessWidget {
   }
 }
 
+// ← PASTIKAN CLASS INI ADA DI BAWAH, DI FILE YANG SAMA
 class _StatCard extends StatelessWidget {
   final String label, value;
   final String? sub;
@@ -54,13 +58,16 @@ class _StatCard extends StatelessWidget {
           const Icon(Icons.person_outline, color: Colors.white70, size: 28),
           const SizedBox(height: 6),
           Text(label,
-            textAlign: TextAlign.center,
-            style: const TextStyle(color: Colors.white70, fontSize: 10)),
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.white70, fontSize: 10)),
           Text(value,
-            style: const TextStyle(
-                color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold)),
           if (sub != null)
-            Text(sub!, style: const TextStyle(color: Colors.white70, fontSize: 10)),
+            Text(sub!,
+                style: const TextStyle(color: Colors.white70, fontSize: 10)),
         ],
       ),
     );

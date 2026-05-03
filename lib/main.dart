@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/beranda_screen.dart';
+import 'presentation/screens/home/beranda_screen.dart';
 
 void main() => runApp(const MyApp());
 

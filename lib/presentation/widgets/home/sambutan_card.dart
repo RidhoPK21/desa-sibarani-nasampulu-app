@@ -23,7 +23,7 @@ class SambutanCard extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Colors.transparent, Colors.black.withOpacity(0.75)],
+                  colors: [Colors.transparent, Colors.black.withValues(alpha: 0.75)],
                 ),
               ),
             ),
@@ -36,18 +36,18 @@ class SambutanCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text('Salam',
-                    style: TextStyle(color: Color(0xFF80CBC4), fontSize: 12)),
+                      style: TextStyle(color: Color(0xFF80CBC4), fontSize: 12)),
                   const Text('Kata Sambutan Kepala Desa',
-                    style: TextStyle(color: Colors.white,
-                        fontSize: 16, fontWeight: FontWeight.bold)),
+                      style: TextStyle(color: Colors.white,
+                          fontSize: 16, fontWeight: FontWeight.bold)),
                   const Text('Bapak Soltan Sibarani',
-                    style: TextStyle(color: Colors.white70, fontSize: 12)),
+                      style: TextStyle(color: Colors.white70, fontSize: 12)),
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () {},
                       child: const Text('View Details →',
-                        style: TextStyle(color: Color(0xFF4DB6AC))),
+                          style: TextStyle(color: Color(0xFF4DB6AC))),
                     ),
                   ),
                 ],

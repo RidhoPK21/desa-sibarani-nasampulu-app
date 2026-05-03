@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../widget/nav_tab_bar.dart';
-import '../widget/sambutan_card.dart';
-import '../widget/berita_card.dart';
-import '../widget/demografi_card.dart';
+import '../../widgets/home/nav_tab_bar.dart';
+import '../../widgets/home/sambutan_card.dart';
+import '../../widgets/home/berita_card.dart';
+import '../../widgets/home/demografi_card.dart';
 
 class BerandaScreen extends StatefulWidget {
   const BerandaScreen({super.key});
