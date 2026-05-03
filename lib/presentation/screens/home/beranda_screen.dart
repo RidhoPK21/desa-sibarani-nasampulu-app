@@ -3,6 +3,7 @@ import '../../widgets/home/nav_tab_bar.dart';
 import '../../widgets/home/sambutan_card.dart';
 import '../../widgets/home/berita_card.dart';
 import '../../widgets/home/demografi_card.dart';
+import '../../../core/network/api_service.dart';
 
 class BerandaScreen extends StatefulWidget {
   const BerandaScreen({super.key});
