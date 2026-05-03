@@ -17,6 +17,6 @@ void main() {
 
     await tester.pump();
 
-    expect(find.text('Desa Sibarani'), findsOneWidget);
+    expect(find.text('Desa Sibarani Nasampulu'), findsOneWidget);
   });
 }

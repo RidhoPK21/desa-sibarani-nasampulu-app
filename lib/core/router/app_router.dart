@@ -28,7 +28,42 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/',
             builder: (context, state) => const BerandaScreen(),
           ),
+          GoRoute(
+            path: '/profil',
+            builder: (context, state) =>
+                const _ComingSoonScreen(title: 'Profil'),
+          ),
+          GoRoute(
+            path: '/infografis',
+            builder: (context, state) =>
+                const _ComingSoonScreen(title: 'Infografis'),
+          ),
+          GoRoute(
+            path: '/kegiatan',
+            builder: (context, state) =>
+                const _ComingSoonScreen(title: 'Kegiatan'),
+          ),
           GoRoute(path: '/idm', builder: (context, state) => const IdmScreen()),
+          GoRoute(
+            path: '/dokumentasi',
+            builder: (context, state) =>
+                const _ComingSoonScreen(title: 'Dokumentasi'),
+          ),
+          GoRoute(
+            path: '/berita',
+            builder: (context, state) =>
+                const _ComingSoonScreen(title: 'Berita'),
+          ),
+          GoRoute(
+            path: '/apb-desa',
+            builder: (context, state) =>
+                const _ComingSoonScreen(title: 'APB Desa'),
+          ),
+          GoRoute(
+            path: '/galeri',
+            builder: (context, state) =>
+                const _ComingSoonScreen(title: 'Galeri'),
+          ),
         ],
       ),
       GoRoute(
@@ -69,3 +104,46 @@ final routerProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
+
+class _ComingSoonScreen extends StatelessWidget {
+  final String title;
+
+  const _ComingSoonScreen({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8FAFC),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.construction_rounded,
+                size: 52,
+                color: Color(0xFF4EA674),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w800,
+                  color: Color(0xFF123524),
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Halaman ini sedang dipersiapkan.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Color(0xFF64748B), fontSize: 14),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
