@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/auth/providers/auth_provider.dart';
-import '../../features/public/beranda/screens/berita_screen.dart';
+import '../../presentation/screens/berita/berita_screen.dart';
 import '../../features/public/beranda/screens/beranda_screen.dart'; // Import BerandaScreen lama
 import '../../shared/layouts/public_layout.dart';
 import '../../shared/layouts/admin_layout.dart';

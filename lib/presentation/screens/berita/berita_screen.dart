@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart'; // Untuk kIsWeb
-import '../providers/berita_provider.dart';
-import '../models/berita.dart';
+import '../../../features/public/berita/providers/berita_provider.dart';
+import '../../../features/public/berita/models/berita.dart';
 import 'berita_detail_screen.dart';
 
 class BeritaScreen extends ConsumerWidget {
