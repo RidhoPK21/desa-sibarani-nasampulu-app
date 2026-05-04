@@ -7,7 +7,7 @@ import 'package:desa_sibarani_app/features/public/apbdes/presentation/screens/ap
 import 'package:desa_sibarani_app/features/public/apbdes/presentation/screens/apbdes_detail_screen.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: '/beranda',
+  initialLocation: '/apbdes',
   routes: [
     GoRoute(
       path: '/beranda',
