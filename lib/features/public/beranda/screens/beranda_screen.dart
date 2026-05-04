@@ -20,7 +20,7 @@ class _BerandaScreenState extends State<BerandaScreen> {
 
     try {
       // 🔥 Menembak API Gateway Nginx/Laravel untuk mengambil daftar berita
-      final response = await api.get('/info/berita');
+      final response = await api.get('/berita');
 
       setState(() {
         // Jika sukses, kita tampilkan status dan sedikit potongan datanya
