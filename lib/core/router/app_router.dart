@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../features/auth/providers/auth_provider.dart';
 import '../../features/public/beranda/screens/beranda_screen.dart';
 import '../../presentation/screens/admin/idm_admin_screen.dart';
+import '../../presentation/screens/admin/kegiatan_admin_screen.dart';
 import '../../presentation/screens/auth/login_screen.dart';
 import '../../presentation/screens/idm/idm_screen.dart';
 import '../../shared/layouts/admin_layout.dart';
@@ -63,6 +64,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/admin/idm',
             builder: (context, state) => const IdmAdminScreen(),
+          ),
+          GoRoute(
+            path: '/admin/kegiatan',
+            builder: (context, state) => const KegiatanAdminScreen(),
           ),
         ],
       ),

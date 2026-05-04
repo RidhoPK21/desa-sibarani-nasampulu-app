@@ -61,6 +61,12 @@ class AdminLayout extends ConsumerWidget {
               selected: location == '/admin/idm',
               onTap: () => context.go('/admin/idm'),
             ),
+            _AdminMenuTile(
+              icon: Icons.event_rounded,
+              title: 'Kelola Kegiatan',
+              selected: location == '/admin/kegiatan',
+              onTap: () => context.go('/admin/kegiatan'),
+            ),
             const Divider(height: 24),
             ListTile(
               leading: const Icon(Icons.logout_rounded, color: Colors.red),
