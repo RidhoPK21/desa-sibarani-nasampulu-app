@@ -18,28 +18,27 @@ class ApbdesSectionTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey.shade200),
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 4,
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 6,
             offset: const Offset(0, 2),
           ),
         ],
       ),
       child: Column(
         children: [
+          // Header
           Container(
-            padding:
-            const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               color: headerColor.withOpacity(0.08),
               borderRadius:
-              const BorderRadius.vertical(top: Radius.circular(8)),
+              const BorderRadius.vertical(top: Radius.circular(12)),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -49,7 +48,7 @@ class ApbdesSectionTable extends StatelessWidget {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: headerColor,
-                    fontSize: 13,
+                    fontSize: 16,
                   ),
                 ),
                 Text(
@@ -57,13 +56,13 @@ class ApbdesSectionTable extends StatelessWidget {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: headerColor,
-                    fontSize: 13,
+                    fontSize: 14,
                   ),
                 ),
               ],
             ),
           ),
-          Divider(height: 1, color: Colors.grey.shade200),
+          // Items
           ...items.asMap().entries.map((entry) {
             final index = entry.key;
             final item = entry.value;
@@ -71,23 +70,27 @@ class ApbdesSectionTable extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 10),
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         child: Text(
-                          item.nama,
+                          '${item.nama} :',
                           style: const TextStyle(
-                              fontSize: 12, color: Colors.black87),
+                            fontSize: 13,
+                            color: Colors.black87,
+                          ),
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 16),
                       Text(
                         item.jumlah,
                         style: const TextStyle(
-                          fontSize: 12,
+                          fontSize: 13,
                           fontWeight: FontWeight.w600,
                           color: Colors.black87,
                         ),
@@ -96,10 +99,16 @@ class ApbdesSectionTable extends StatelessWidget {
                   ),
                 ),
                 if (index < items.length - 1)
-                  Divider(height: 1, color: Colors.grey.shade100),
+                  Divider(
+                    height: 1,
+                    color: Colors.grey.shade200,
+                    indent: 16,
+                    endIndent: 16,
+                  ),
               ],
             );
           }),
+          const SizedBox(height: 4),
         ],
       ),
     );

@@ -33,6 +33,7 @@ class ApbdesModel {
   final List<ItemKeuanganModel> pendapatan;
   final List<ItemKeuanganModel> belanja;
   final List<ItemKeuanganModel> pembiayaan;
+  final String? catatanPerubahan;
 
   ApbdesModel({
     required this.id,
@@ -45,5 +46,6 @@ class ApbdesModel {
     required this.pendapatan,
     required this.belanja,
     required this.pembiayaan,
+    this.catatanPerubahan,
   });
 }
