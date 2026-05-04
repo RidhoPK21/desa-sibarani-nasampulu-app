@@ -31,7 +31,7 @@ class _ApbdesDetailScreenState extends ConsumerState<ApbdesDetailScreen> {
               TextSpan(
                 text: 'Sibarani ',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
                 ),
@@ -39,8 +39,8 @@ class _ApbdesDetailScreenState extends ConsumerState<ApbdesDetailScreen> {
               TextSpan(
                 text: 'Nasampulu',
                 style: TextStyle(
-                  color: Colors.white70,
-                  fontWeight: FontWeight.normal,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
                   fontSize: 20,
                 ),
               ),
