@@ -27,24 +27,35 @@ class AdminLayout extends ConsumerWidget {
       drawer: Drawer(
         child: ListView(
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(color: Color(0xFF123524)),
+            DrawerHeader(
+              decoration: const BoxDecoration(color: Color(0xFF123524)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(
+                  Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset('assets/logo-toba.jpg', fit: BoxFit.cover),
+                    ),
+                  ),
+                  const Spacer(),
+                  const Text(
                     'Menu Admin',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 22,
+                      fontSize: 20,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                  SizedBox(height: 6),
-                  Text(
-                    'Kelola konten dan statistik desa',
-                    style: TextStyle(color: Colors.white70),
+                  const Text(
+                    'Sibarani Nasampulu',
+                    style: TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ],
               ),
@@ -52,14 +63,20 @@ class AdminLayout extends ConsumerWidget {
             _AdminMenuTile(
               icon: Icons.dashboard_rounded,
               title: 'Dashboard',
-              selected: location == '/admin',
-              onTap: () => context.go('/admin'),
+              selected: location == '/admin' || location.startsWith('/admin/infografis'),
+              onTap: () {
+                Navigator.pop(context); // Tutup drawer
+                context.go('/admin');
+              },
             ),
             _AdminMenuTile(
               icon: Icons.bar_chart_rounded,
               title: 'Kelola IDM',
               selected: location == '/admin/idm',
-              onTap: () => context.go('/admin/idm'),
+              onTap: () {
+                Navigator.pop(context); // Tutup drawer
+                context.go('/admin/idm');
+              },
             ),
             const Divider(height: 24),
             ListTile(
