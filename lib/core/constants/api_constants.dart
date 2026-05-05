@@ -29,6 +29,8 @@ class ApiConstants {
   static String get galeri => '$contentBase/galeri';
   static String get layanan => '$contentBase/layanan';
 
+  static String get apbdes => '$infoBase/apbdes';
+
   static Map<String, String> get defaultHeaders => {
     'Content-Type': 'application/json',
     'Accept': 'application/json',

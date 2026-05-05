@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import '../../../core/theme/app_theme.dart';
 import '../../../data/models/apbdes_model.dart';
 import '../../../features/auth/providers/apbdes_provider.dart';
 
@@ -137,6 +136,7 @@ class _ApbdesFormScreenState extends State<ApbdesFormScreen> {
       penyertaanModalDesa: v['penyertaan_modal_desa']!,
     );
 
+    // Memanggil fungsi save yang baru saja kita tambahkan di Provider
     final ok = await context
         .read<ApbdesProvider>()
         .save(model, existing: widget.existing);
@@ -149,7 +149,8 @@ class _ApbdesFormScreenState extends State<ApbdesFormScreen> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(context.read<ApbdesProvider>().error ??
+          // Menyesuaikan pemanggilan properti errorMessage
+          content: Text(context.read<ApbdesProvider>().errorMessage ??
               'Terjadi kesalahan saat menyimpan!'),
           backgroundColor: Colors.red,
         ),
@@ -160,12 +161,12 @@ class _ApbdesFormScreenState extends State<ApbdesFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.bgGray,
+      backgroundColor: Colors.grey.shade50, // Perbaikan warna
       appBar: AppBar(
         title: Row(
           children: [
             const Icon(Icons.account_balance_wallet_outlined,
-                color: AppTheme.primaryGreen),
+                color: Colors.green), // Perbaikan warna
             const SizedBox(width: 8),
             Expanded(
               child: Text(
@@ -191,14 +192,14 @@ class _ApbdesFormScreenState extends State<ApbdesFormScreen> {
               onPressed: _saving ? null : _save,
               icon: _saving
                   ? const SizedBox(
-                      height: 16,
-                      width: 16,
-                      child: CircularProgressIndicator(
-                          strokeWidth: 2, color: Colors.white))
+                  height: 16,
+                  width: 16,
+                  child: CircularProgressIndicator(
+                      strokeWidth: 2, color: Colors.white))
                   : const Icon(Icons.check_circle_outline, size: 18),
               label: Text(_isEdit ? 'Simpan Versi Baru' : 'Simpan APBDes'),
               style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.primaryGreen),
+                  backgroundColor: Colors.green), // Perbaikan warna
             ),
           ),
         ],
@@ -259,7 +260,7 @@ class _ApbdesFormScreenState extends State<ApbdesFormScreen> {
                   child: TextField(
                     controller: _namaDesa,
                     decoration:
-                        const InputDecoration(hintText: 'Nama Desa'),
+                    const InputDecoration(hintText: 'Nama Desa'),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -270,7 +271,7 @@ class _ApbdesFormScreenState extends State<ApbdesFormScreen> {
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     decoration:
-                        const InputDecoration(hintText: '2024'),
+                    const InputDecoration(hintText: '2024'),
                   ),
                 ),
               ],
@@ -280,9 +281,9 @@ class _ApbdesFormScreenState extends State<ApbdesFormScreen> {
 
           // ── B. Pendapatan ─────────────────────────────────────
           _SectionCard(
-            topColor: AppTheme.accentGreen,
+            topColor: Colors.green.shade400, // Perbaikan warna
             title: 'B. Pendapatan Desa',
-            titleColor: AppTheme.primaryGreen,
+            titleColor: Colors.green.shade800, // Perbaikan warna
             child: Column(children: [
               _InputUang(
                   label: 'Pendapatan Asli Desa (PADes)',
@@ -310,7 +311,7 @@ class _ApbdesFormScreenState extends State<ApbdesFormScreen> {
 
           // ── C. Belanja Pemerintahan ───────────────────────────
           _SectionCard(
-            topColor: AppTheme.orange,
+            topColor: Colors.orange, // Perbaikan warna
             title: 'C. Belanja - Pemerintahan (Bid. 1)',
             titleColor: Colors.orange.shade800,
             child: Column(children: [
@@ -356,7 +357,7 @@ class _ApbdesFormScreenState extends State<ApbdesFormScreen> {
 
           // ── D. Belanja Pembangunan ────────────────────────────
           _SectionCard(
-            topColor: AppTheme.orange,
+            topColor: Colors.orange, // Perbaikan warna
             title: 'D. Belanja - Pembangunan (Bid. 2)',
             titleColor: Colors.orange.shade800,
             child: Column(children: [
@@ -426,7 +427,7 @@ class _ApbdesFormScreenState extends State<ApbdesFormScreen> {
 
           // ── E. Belanja Lainnya ────────────────────────────────
           _SectionCard(
-            topColor: AppTheme.orange,
+            topColor: Colors.orange, // Perbaikan warna
             title: 'E. Belanja - Lainnya (Bid. 3, 4, 5)',
             titleColor: Colors.orange.shade800,
             child: Column(children: [
@@ -470,7 +471,7 @@ class _ApbdesFormScreenState extends State<ApbdesFormScreen> {
 
           // ── F. Pembiayaan ─────────────────────────────────────
           _SectionCard(
-            topColor: AppTheme.blue,
+            topColor: Colors.blue, // Perbaikan warna
             title: 'F. Pembiayaan Desa',
             titleColor: Colors.blue.shade800,
             child: Column(children: [
@@ -498,7 +499,7 @@ class _ApbdesFormScreenState extends State<ApbdesFormScreen> {
             style: const TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
-                color: AppTheme.textSlate)),
+                color: Colors.blueGrey)), // Perbaikan warna
         const SizedBox(height: 4),
         child,
       ],
@@ -531,7 +532,7 @@ class _SectionCard extends StatelessWidget {
         border: Border(top: BorderSide(color: topColor, width: 4)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04), // Perbaikan peringatan withOpacity
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -608,7 +609,7 @@ class _InputUangState extends State<_InputUang> {
             style: const TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textSlate,
+              color: Colors.blueGrey, // Perbaikan warna
             ),
           ),
           const SizedBox(height: 4),
@@ -627,8 +628,7 @@ class _InputUangState extends State<_InputUang> {
                 prefixText: 'Rp ',
                 prefixStyle: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color:
-                      _focused ? AppTheme.accentGreen : Colors.grey.shade500,
+                  color: _focused ? Colors.green : Colors.grey.shade500, // Perbaikan warna
                   fontSize: 13,
                 ),
                 contentPadding: const EdgeInsets.symmetric(

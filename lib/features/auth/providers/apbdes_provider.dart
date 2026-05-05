@@ -1,57 +1,72 @@
 import 'package:flutter/material.dart';
-import '../../data/models/apbdes_model.dart';
-import '../../data/repositories/apbdes_repository.dart';
 
-class ApbdesProvider extends ChangeNotifier {
-  final ApbdesRepository _repo = ApbdesRepository();
+import '../../../data/models/apbdes_model.dart';
+import '../../../data/services/api_service.dart';
 
-  List<ApbdesModel> _list = [];
+
+class ApbdesProvider with ChangeNotifier {
+  final ApiService _apiService = ApiService();
+
+  List<ApbdesModel> _apbdesList = [];
+  List<ApbdesModel> get apbdesList => _apbdesList;
+
   bool _isLoading = false;
-  String? _error;
-
-  List<ApbdesModel> get list => _list;
   bool get isLoading => _isLoading;
-  String? get error => _error;
 
-  Future<void> fetchAll() async {
+  String? _errorMessage;
+  String? get errorMessage => _errorMessage;
+
+  // Mengambil data dari backend
+  Future<void> fetchApbdes() async {
     _isLoading = true;
-    _error = null;
+    _errorMessage = null;
     notifyListeners();
+
     try {
-      _list = await _repo.getAll();
+      _apbdesList = await _apiService.fetchApbdes();
     } catch (e) {
-      _error = e.toString();
+      _errorMessage = 'Gagal memuat data: ${e.toString()}';
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
+// --- Tambahkan blok kode ini ke dalam ApbdesProvider ---
 
+  // Fungsi untuk menyimpan atau mengupdate data
   Future<bool> save(ApbdesModel model, {ApbdesModel? existing}) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
     try {
-      if (existing != null) {
-        await _repo.update(existing.id!, model);
+      if (existing != null && existing.id != null) {
+        // Jika data sudah ada, lakukan UPDATE
+        await _apiService.updateApbdes(existing.id!, model);
       } else {
-        await _repo.create(model);
+        // Jika data baru, lakukan CREATE
+        await _apiService.createApbdes(model);
       }
-      await fetchAll();
-      return true;
+      return true; // Berhasil
     } catch (e) {
-      _error = e.toString();
+      _errorMessage = 'Gagal menyimpan data: ${e.toString()}';
+      return false; // Gagal
+    } finally {
+      _isLoading = false;
       notifyListeners();
-      return false;
     }
   }
-
-  Future<bool> remove(int id) async {
+  // Menghapus data
+  Future<void> deleteApbdes(int id) async {
     try {
-      await _repo.delete(id);
-      await fetchAll();
-      return true;
-    } catch (e) {
-      _error = e.toString();
+      await _apiService.deleteApbdes(id);
+
+      // PERBAIKAN NULL SAFETY: Cukup bandingkan langsung (int? == int itu valid di Dart)
+      _apbdesList.removeWhere((item) => item.id == id);
+
       notifyListeners();
-      return false;
+    } catch (e) {
+      throw Exception('Gagal menghapus data');
     }
   }
 }
