@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../data/models/apbdes_model.dart';
-import '../../../features/auth/providers/apbdes_provider.dart';
-import '../../widgets/apbdes/apbdes_form_screen.dart';
+import 'package:desa_sibarani_nasampulu/core/theme/app_theme.dart';
+import 'package:desa_sibarani_nasampulu/data/models/apbdes_model.dart';
+import 'package:desa_sibarani_nasampulu/features/auth/providers/apbdes_provider.dart';
+import 'package:desa_sibarani_nasampulu/presentation/widgets/apbdes/apbdes_form_screen.dart';
 
 class ApbdesAdminScreen extends StatefulWidget {
   const ApbdesAdminScreen({super.key});
@@ -55,14 +55,11 @@ class _ApbdesAdminScreenState extends State<ApbdesAdminScreen> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text(
           'Yakin Menghapus APBDes?',
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: AppTheme.primaryGreen,
-              fontSize: 18),
+          style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary),
         ),
         content: Text(
           'Data Tahun ${item.tahun} Versi ${item.versi} akan dihapus selamanya.',
-          style: const TextStyle(color: AppTheme.primaryGreen),
+          style: const TextStyle(color: AppColors.textSecondary),
         ),
         actions: [
           TextButton(
@@ -70,8 +67,6 @@ class _ApbdesAdminScreenState extends State<ApbdesAdminScreen> {
             child: const Text('Batal', style: TextStyle(color: Colors.red)),
           ),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.accentGreen),
             onPressed: () async {
               Navigator.pop(context);
               await context.read<ApbdesProvider>().remove(item.id!);
@@ -86,15 +81,8 @@ class _ApbdesAdminScreenState extends State<ApbdesAdminScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.bgGray,
       appBar: AppBar(
-        title: const Row(
-          children: [
-            Icon(Icons.menu, color: AppTheme.primaryGreen),
-            SizedBox(width: 8),
-            Text('Kelola APBDes'),
-          ],
-        ),
+        title: const Text('Kelola APBDes'),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -103,9 +91,8 @@ class _ApbdesAdminScreenState extends State<ApbdesAdminScreen> {
               icon: const Icon(Icons.add_circle_outline, size: 18),
               label: const Text('Buat APBDes Baru'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primaryGreen,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                backgroundColor: AppColors.primaryLight,
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               ),
             ),
           ),
@@ -113,7 +100,6 @@ class _ApbdesAdminScreenState extends State<ApbdesAdminScreen> {
       ),
       body: Column(
         children: [
-          // Search bar
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
             child: TextField(
@@ -124,21 +110,17 @@ class _ApbdesAdminScreenState extends State<ApbdesAdminScreen> {
                 prefixIcon: const Icon(Icons.search, size: 20),
                 suffixIcon: _searchQuery.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.close, size: 18),
-                        onPressed: () {
-                          _searchCtrl.clear();
-                          setState(() => _searchQuery = '');
-                        },
-                      )
+                  icon: const Icon(Icons.close, size: 18),
+                  onPressed: () {
+                    _searchCtrl.clear();
+                    setState(() => _searchQuery = '');
+                  },
+                )
                     : null,
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               ),
             ),
           ),
           const SizedBox(height: 12),
-
-          // List
           Expanded(
             child: Consumer<ApbdesProvider>(
               builder: (_, prov, __) {
@@ -148,9 +130,8 @@ class _ApbdesAdminScreenState extends State<ApbdesAdminScreen> {
                 final filtered = _searchQuery.isEmpty
                     ? prov.list
                     : prov.list
-                        .where((e) =>
-                            e.tahun.toString().contains(_searchQuery))
-                        .toList();
+                    .where((e) => e.tahun.toString().contains(_searchQuery))
+                    .toList();
 
                 if (filtered.isEmpty) {
                   return Center(
@@ -158,13 +139,10 @@ class _ApbdesAdminScreenState extends State<ApbdesAdminScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(Icons.inbox_outlined,
-                            size: 64,
-                            color: Colors.grey.shade300),
+                            size: 64, color: Colors.grey.shade300),
                         const SizedBox(height: 8),
-                        Text(
-                          'Belum ada data APBDes',
-                          style: TextStyle(color: Colors.grey.shade500),
-                        ),
+                        const Text('Belum ada data APBDes',
+                            style: TextStyle(color: AppColors.textHint)),
                       ],
                     ),
                   );
@@ -174,8 +152,7 @@ class _ApbdesAdminScreenState extends State<ApbdesAdminScreen> {
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
                   itemCount: filtered.length,
                   separatorBuilder: (_, __) => const SizedBox(height: 10),
-                  itemBuilder: (_, i) =>
-                      _ApbdesCard(
+                  itemBuilder: (_, i) => _ApbdesCard(
                     item: filtered[i],
                     formatRupiah: _formatRupiah,
                     onEdit: () => _goToForm(existing: filtered[i]),
@@ -191,9 +168,6 @@ class _ApbdesAdminScreenState extends State<ApbdesAdminScreen> {
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-// CARD WIDGET
-// ─────────────────────────────────────────────────────────────
 class _ApbdesCard extends StatelessWidget {
   final ApbdesModel item;
   final String Function(double) formatRupiah;
@@ -214,12 +188,12 @@ class _ApbdesCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppTheme.cardBorder),
+        color: AppColors.cardBackground,
+        borderRadius: BorderRadius.circular(16),
+        border: const BorderSide(color: Color(0xFFEEEEEE), width: 1) as BoxDecoration?,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -227,13 +201,11 @@ class _ApbdesCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // Header row
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: AppTheme.lightGreen,
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(12)),
+              color: AppColors.primarySurface,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
             ),
             child: Row(
               children: [
@@ -242,13 +214,12 @@ class _ApbdesCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
-                    color: AppTheme.primaryGreen,
+                    color: AppColors.primary,
                   ),
                 ),
                 const SizedBox(width: 10),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
                     color: Colors.blue.shade100,
                     borderRadius: BorderRadius.circular(20),
@@ -263,11 +234,10 @@ class _ApbdesCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 6),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
                     color: item.isAktif == true
-                        ? AppTheme.lightGreen
+                        ? AppColors.primarySurface
                         : Colors.grey.shade100,
                     borderRadius: BorderRadius.circular(20),
                   ),
@@ -277,8 +247,8 @@ class _ApbdesCard extends StatelessWidget {
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
                       color: item.isAktif == true
-                          ? AppTheme.primaryGreen
-                          : Colors.grey,
+                          ? AppColors.primary
+                          : AppColors.textHint,
                     ),
                   ),
                 ),
@@ -286,21 +256,18 @@ class _ApbdesCard extends StatelessWidget {
                 if (item.isAktif == true)
                   IconButton(
                     icon: const Icon(Icons.edit_outlined,
-                        size: 20, color: Colors.blueGrey),
+                        size: 20, color: AppColors.textSecondary),
                     tooltip: 'Ubah & Buat Versi Baru',
                     onPressed: onEdit,
                   ),
                 IconButton(
-                  icon: const Icon(Icons.delete_outline,
-                      size: 20, color: Colors.red),
+                  icon: const Icon(Icons.delete_outline, size: 20, color: Colors.red),
                   tooltip: 'Hapus Permanen',
                   onPressed: onDelete,
                 ),
               ],
             ),
           ),
-
-          // Data rows
           Padding(
             padding: const EdgeInsets.all(14),
             child: Column(
@@ -308,22 +275,22 @@ class _ApbdesCard extends StatelessWidget {
                 _DataRow(
                     label: 'Total Pendapatan',
                     value: formatRupiah(item.totalPendapatan ?? 0),
-                    color: AppTheme.accentGreen),
+                    color: AppColors.primaryLight),
                 const SizedBox(height: 6),
                 _DataRow(
                     label: 'Total Belanja',
                     value: formatRupiah(item.totalBelanja ?? 0),
-                    color: AppTheme.orange),
+                    color: AppColors.idmTertinggal),
                 const SizedBox(height: 6),
                 _DataRow(
                     label: 'Pembiayaan (Netto)',
                     value: formatRupiah(item.pembiayaanNetto),
-                    color: AppTheme.blue),
+                    color: AppColors.idmMandiri),
                 const Divider(height: 16),
                 _DataRow(
                     label: 'Surplus / (Defisit)',
                     value: formatRupiah(surplus),
-                    color: isPlus ? AppTheme.accentGreen : Colors.red,
+                    color: isPlus ? AppColors.primaryLight : AppColors.idmSangat,
                     isBold: true),
               ],
             ),
@@ -355,14 +322,11 @@ class _DataRow extends StatelessWidget {
         Text(label,
             style: TextStyle(
                 fontSize: 12,
-                color: Colors.grey.shade600,
-                fontWeight:
-                    isBold ? FontWeight.bold : FontWeight.normal)),
+                color: AppColors.textSecondary,
+                fontWeight: isBold ? FontWeight.bold : FontWeight.normal)),
         Text(value,
             style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.bold,
-                color: color)),
+                fontSize: 13, fontWeight: FontWeight.bold, color: color)),
       ],
     );
   }
