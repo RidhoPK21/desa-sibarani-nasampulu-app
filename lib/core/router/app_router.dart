@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/auth/providers/auth_provider.dart';
 import '../../features/public/beranda/screens/beranda_screen.dart';
+import '../../presentation/screens/admin/admin_dashboard_screen.dart';
 import '../../presentation/screens/admin/idm_admin_screen.dart';
 import '../../presentation/screens/auth/login_screen.dart';
 import '../../presentation/screens/idm/idm_screen.dart';
@@ -51,14 +52,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         routes: [
           GoRoute(
             path: '/admin',
-            builder: (context, state) => const Scaffold(
-              body: Center(
-                child: Text(
-                  'Dashboard Admin\nPilih menu Kelola IDM dari drawer.',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
+            builder: (context, state) => const AdminDashboardScreen(),
           ),
           GoRoute(
             path: '/admin/idm',
