@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:go_router/go_router.dart'; // 🔥 Wajib untuk tombol admin
+import 'package:flutter/foundation.dart'; // Untuk kIsWeb
 import '../../../../core/network/api_client.dart'; // Sesuaikan path jika perlu
 
 class BerandaScreen extends StatefulWidget {
@@ -19,29 +19,32 @@ class _BerandaScreenState extends State<BerandaScreen> {
     });
 
     try {
-      // 🔥 Menembak API Gateway Nginx kalian untuk mengambil daftar berita
-      final response = await api.get('/info/berita');
-
-      // Ambil teks balasan API
-      String responseText = response.data.toString();
-
-      // 🛡️ Cek: Jika lebih dari 100 huruf, potong. Jika kurang, tampilkan apa adanya (Mencegah RangeError)
-      String displayData = responseText.length > 100
-          ? "${responseText.substring(0, 100)}..."
-          : responseText;
+      // 🔥 Menembak API Gateway Nginx/Laravel untuk mengambil daftar berita
+      final response = await api.get('/berita');
 
       setState(() {
-        // Jika sukses, tampilkan status dan datanya
-        statusKoneksi = "✅ BERHASIL TERHUBUNG!\n\nStatus Code: ${response.statusCode}\nData: $displayData";
+        // Jika sukses, kita tampilkan status dan sedikit potongan datanya
+        String rawData = response.data.toString();
+        
+        // Perbaikan RangeError: Cek panjang string sebelum melakukan substring
+        String previewData = rawData.length > 100 
+            ? "${rawData.substring(0, 100)}..." 
+            : rawData;
+
+        statusKoneksi = "✅ BERHASIL TERHUBUNG!\n\nStatus Code: ${response.statusCode}\nData: $previewData";
       });
     } on DioException catch (e) {
       setState(() {
-        // Jika gagal, berikan pesan spesifik
-        if (e.response?.statusCode == 500) {
-          statusKoneksi = "❌ GAGAL: Server backend sedang bermasalah (Error 500). Cek log Laravel!";
+        // Penanganan khusus untuk CORS Error di Flutter Web
+        if (kIsWeb && e.message != null && e.message!.contains('XMLHttpRequest')) {
+          statusKoneksi = "❌ GAGAL (CORS ERROR)\n\nBrowser memblokir akses. Pastikan Laravel sudah dikonfigurasi 'allowed_origins' => ['*'] di config/cors.php";
         } else {
           statusKoneksi = "❌ GAGAL TERHUBUNG!\n\nError: ${e.message}";
         }
+      });
+    } catch (e) {
+      setState(() {
+        statusKoneksi = "❌ TERJADI KESALAHAN!\n\nError: $e";
       });
     }
   }
@@ -56,16 +59,12 @@ class _BerandaScreenState extends State<BerandaScreen> {
           children: [
             const Icon(Icons.api, size: 80, color: Color(0xFF4EA674)),
             const SizedBox(height: 20),
-
-            // --- TEKS STATUS KONEKSI ---
             Text(
               statusKoneksi,
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 30),
-
-            // --- TOMBOL 1: UJI API ---
             ElevatedButton.icon(
               onPressed: _testKoneksiBackend,
               icon: const Icon(Icons.network_ping),
@@ -74,21 +73,6 @@ class _BerandaScreenState extends State<BerandaScreen> {
                 backgroundColor: const Color(0xFF4EA674),
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              ),
-            ),
-
-            const SizedBox(height: 40), // Jarak pemisah
-
-            // --- TOMBOL 2: JALAN TIKUS MENUJU ADMIN ---
-            TextButton.icon(
-              onPressed: () {
-                // Saat ditekan, GoRouter akan membawa kita ke layar simulasi login rahasia
-                context.go('/login-rahasia');
-              },
-              icon: const Icon(Icons.sensor_door, color: Colors.grey),
-              label: const Text(
-                  "Ke Pintu Rahasia Admin",
-                  style: TextStyle(color: Colors.grey)
               ),
             ),
           ],

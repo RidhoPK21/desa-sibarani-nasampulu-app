@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter/foundation.dart'; // 🔥 TAMBAHKAN INI UNTUK MENDETEKSI WEB
+import 'package:flutter/foundation.dart';
 
 class ApiClient {
   static final ApiClient _instance = ApiClient._internal();
@@ -15,19 +15,19 @@ class ApiClient {
   ApiClient._internal() {
     String baseUrl;
 
-    // 🔥 LOGIKA BARU: Cek apakah jalan di Web, Android, atau iOS
+    // 🔥 Menggunakan port 9000 sesuai instruksi terbaru (API Gateway)
     if (kIsWeb) {
-      baseUrl = 'http://127.0.0.1:9000/api'; // Chrome / Web
+      baseUrl = 'http://127.0.0.1:9000/api/info'; 
     } else if (Platform.isAndroid) {
-      baseUrl = 'http://10.0.2.2:9000/api';  // Emulator Android
+      baseUrl = 'http://10.0.2.2:9000/api/info'; 
     } else {
-      baseUrl = 'http://127.0.0.1:9000/api'; // iOS / Real Device
+      baseUrl = 'http://127.0.0.1:9000/api/info';
     }
 
     dio = Dio(BaseOptions(
       baseUrl: baseUrl,
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10),
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -41,6 +41,14 @@ class ApiClient {
           options.headers['Authorization'] = 'Bearer $token';
         }
         return handler.next(options);
+      },
+      onResponse: (response, handler) {
+        // Logika tambahan jika diperlukan untuk handle wrapper response global
+        return handler.next(response);
+      },
+      onError: (DioException e, handler) {
+        // Centralized error handling
+        return handler.next(e);
       },
     ));
   }
