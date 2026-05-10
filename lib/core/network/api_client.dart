@@ -17,7 +17,7 @@ class ApiClient {
 
     // 🔥 LOGIKA BARU: Cek apakah jalan di Web, Android, atau iOS
     if (kIsWeb) {
-      baseUrl = 'http://127.0.0.1:9000/api'; // Chrome / Web
+      baseUrl = 'http://localhost:9000/api'; // Chrome / Web
     } else if (Platform.isAndroid) {
       baseUrl = 'http://10.0.2.2:9000/api'; // Emulator Android
     } else {

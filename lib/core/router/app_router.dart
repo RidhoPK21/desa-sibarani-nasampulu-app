@@ -4,9 +4,13 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/auth/providers/auth_provider.dart';
 import '../../features/public/beranda/screens/beranda_screen.dart';
+import '../../presentation/screens/admin/berita_admin_screen.dart';
 import '../../presentation/screens/admin/idm_admin_screen.dart';
+import '../../presentation/screens/admin/ppid_admin_screen.dart';
 import '../../presentation/screens/auth/login_screen.dart';
 import '../../presentation/screens/idm/idm_screen.dart';
+import '../../presentation/screens/public/galeri_public_screen.dart';
+import '../../presentation/screens/public/ppid_public_screen.dart';
 import '../../shared/layouts/admin_layout.dart';
 import '../../shared/layouts/public_layout.dart';
 
@@ -29,6 +33,14 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const BerandaScreen(),
           ),
           GoRoute(path: '/idm', builder: (context, state) => const IdmScreen()),
+          GoRoute(
+            path: '/ppid',
+            builder: (context, state) => const PpidPublicScreen(),
+          ),
+          GoRoute(
+            path: '/galeri',
+            builder: (context, state) => const GaleriPublicScreen(),
+          ),
         ],
       ),
       GoRoute(
@@ -63,6 +75,14 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/admin/idm',
             builder: (context, state) => const IdmAdminScreen(),
+          ),
+          GoRoute(
+            path: '/admin/berita',
+            builder: (context, state) => const BeritaAdminScreen(),
+          ),
+          GoRoute(
+            path: '/admin/ppid',
+            builder: (context, state) => const PpidAdminScreen(),
           ),
         ],
       ),

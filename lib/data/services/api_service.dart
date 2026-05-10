@@ -41,12 +41,24 @@ class ApiService {
 
   // ─── Generic POST ────────────────────────────────────────────────
   Future<Response> post(String url, {dynamic data}) async {
-    return await _dio.post(url, data: data);
+    return await _dio.post(
+      url,
+      data: data,
+      options: data is FormData
+          ? Options(headers: {'Content-Type': 'multipart/form-data'})
+          : null,
+    );
   }
 
   // ─── Generic PUT ─────────────────────────────────────────────────
   Future<Response> put(String url, {dynamic data}) async {
-    return await _dio.put(url, data: data);
+    return await _dio.put(
+      url,
+      data: data,
+      options: data is FormData
+          ? Options(headers: {'Content-Type': 'multipart/form-data'})
+          : null,
+    );
   }
 
   // ─── Generic DELETE ──────────────────────────────────────────────

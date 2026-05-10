@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/constants/app_assets.dart';
 import '../../features/auth/providers/auth_provider.dart';
 
 class AdminLayout extends ConsumerWidget {
@@ -27,12 +28,14 @@ class AdminLayout extends ConsumerWidget {
       drawer: Drawer(
         child: ListView(
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(color: Color(0xFF123524)),
+            DrawerHeader(
+              decoration: const BoxDecoration(color: Color(0xFF123524)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  Image.asset(AppAssets.logoDesa, width: 48, height: 48),
+                  const SizedBox(height: 10),
                   Text(
                     'Menu Admin',
                     style: TextStyle(
@@ -60,6 +63,18 @@ class AdminLayout extends ConsumerWidget {
               title: 'Kelola IDM',
               selected: location == '/admin/idm',
               onTap: () => context.go('/admin/idm'),
+            ),
+            _AdminMenuTile(
+              icon: Icons.article_rounded,
+              title: 'Kelola Berita',
+              selected: location == '/admin/berita',
+              onTap: () => context.go('/admin/berita'),
+            ),
+            _AdminMenuTile(
+              icon: Icons.folder_copy_rounded,
+              title: 'Kelola PPID',
+              selected: location == '/admin/ppid',
+              onTap: () => context.go('/admin/ppid'),
             ),
             const Divider(height: 24),
             ListTile(
