@@ -1,32 +1,68 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'navbar.dart'; // 🔥 Import Navbar buatan temanmu
 
-class PublicLayout extends StatelessWidget {
-  final Widget child; // Ini adalah pengganti <Outlet /> dari React
-  final String location;
+class PublicLayout extends StatefulWidget {
+  final Widget child; // Pengganti <Outlet /> dari React
+  final String location; // Penanda URL aktif
 
   const PublicLayout({super.key, required this.child, required this.location});
 
   @override
-  Widget build(BuildContext context) {
-    final currentIndex = location == '/idm' ? 1 : 0;
+  State<PublicLayout> createState() => _PublicLayoutState();
+}
 
+class _PublicLayoutState extends State<PublicLayout> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollToTop();
+  }
+
+  @override
+  void didUpdateWidget(covariant PublicLayout oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.location != widget.location) {
+      _scrollToTop();
+    }
+  }
+
+  void _scrollToTop() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_scrollController.hasClients) return;
+      _scrollController.jumpTo(0);
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(location == '/idm' ? 'IDM Desa' : 'Desa Sibarani'),
-        backgroundColor: const Color(0xFF4EA674),
-      ),
-      body: child, // Konten halaman akan muncul di sini
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: (index) {
-          if (index == currentIndex) return;
-          context.go(index == 0 ? '/' : '/idm');
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'IDM'),
-        ],
+      backgroundColor: const Color(0xFFF3F4F6), // Warna dasar abu-abu terang
+
+      // 🔥 SafeArea Diletakkan di sini agar Notch/Poni HP tidak menimpa Navbar
+      body: SafeArea(
+        child: Column(
+          children: [
+            // 1. Memanggil Navbar buatan temanmu
+            Navbar(location: widget.location),
+
+            // 2. Konten Halaman (Child)
+            Expanded(
+              child: PrimaryScrollController(
+                controller: _scrollController,
+                // 🔥 HAPUS Padding top: 20 dari versi temanmu agar SliverAppBar IDM bisa menempel sempurna ke Navbar
+                child: widget.child,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
