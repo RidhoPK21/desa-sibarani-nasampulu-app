@@ -1,9 +1,11 @@
+// lib/shared/layouts/public_layout.dart
+
 import 'package:flutter/material.dart';
 import 'navbar.dart'; // 🔥 Import Navbar buatan temanmu
 
 class PublicLayout extends StatefulWidget {
-  final Widget child; // Pengganti <Outlet /> dari React
-  final String location; // Penanda URL aktif
+  final Widget child;
+  final String location;
 
   const PublicLayout({super.key, required this.child, required this.location});
 
@@ -44,20 +46,17 @@ class _PublicLayoutState extends State<PublicLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F4F6), // Warna dasar abu-abu terang
+      backgroundColor: const Color(0xFFF3F4F6),
 
-      // 🔥 SafeArea Diletakkan di sini agar Notch/Poni HP tidak menimpa Navbar
       body: SafeArea(
         child: Column(
           children: [
-            // 1. Memanggil Navbar buatan temanmu
             Navbar(location: widget.location),
 
             // 2. Konten Halaman (Child)
             Expanded(
               child: PrimaryScrollController(
                 controller: _scrollController,
-                // 🔥 HAPUS Padding top: 20 dari versi temanmu agar SliverAppBar IDM bisa menempel sempurna ke Navbar
                 child: widget.child,
               ),
             ),

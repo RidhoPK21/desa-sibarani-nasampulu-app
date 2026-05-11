@@ -1,3 +1,4 @@
+// lib/core/router/app_router.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,8 +12,8 @@ import '../../shared/layouts/admin_layout.dart';
 
 // --- SCREENS ---
 import '../../features/public/beranda/screens/beranda_screen.dart';
+import '../../features/public/kegiatan/screens/kegiatan_screen.dart';
 import '../../features/public/idm/screens/idm_screen.dart';
-import '../../features/public/kegiatan/screens/kegiatan_screen.dart'; // 🔥 Tambahkan ini
 import '../../features/public/apbdes/presentation/screens/apbdes_list_screen.dart';
 import '../../features/public/apbdes/presentation/screens/apbdes_detail_screen.dart';
 import '../../features/public/berita/screens/berita_screen.dart';
