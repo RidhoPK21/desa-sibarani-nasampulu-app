@@ -6,394 +6,262 @@ import '../../core/constants/app_assets.dart';
 import '../../features/auth/providers/auth_provider.dart';
 
 class AdminLayout extends ConsumerWidget {
-  final Widget child;
+  final Widget child; // Pengganti <Outlet />
 
-  const AdminLayout({
-    super.key,
-    required this.child,
-  });
+  const AdminLayout({super.key, required this.child});
 
-  Future<void> _logout(
-    BuildContext context,
-    WidgetRef ref,
-  ) async {
-    await ref.read(authProvider.notifier).logout();
-
-    if (!context.mounted) return;
-
-    context.go('/');
-  }
-
-  void _showLogoutModal(
-    BuildContext context,
-    WidgetRef ref,
-  ) {
+  // Fungsi untuk memunculkan Modal Konfirmasi Logout (Pengganti state showLogoutModal)
+  void _showLogoutModal(BuildContext context, WidgetRef ref) {
     showDialog(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          contentPadding: const EdgeInsets.all(24),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.red.shade50,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.warning_amber_rounded,
-                  color: Colors.red.shade500,
-                  size: 36,
-                ),
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        contentPadding: const EdgeInsets.all(24),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Ikon Peringatan Merah
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.red.shade50,
+                shape: BoxShape.circle,
               ),
-
-              const SizedBox(height: 16),
-
-              const Text(
-                'Yakin Ingin Keluar?',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              const SizedBox(height: 8),
-
-              const Text(
-                'Anda akan mengakhiri sesi admin dan kembali ke halaman publik.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 14,
-                ),
-              ),
-
-              const SizedBox(height: 24),
-
-              Row(
-                children: [
-                  Expanded(
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: Colors.grey.shade100,
-                        foregroundColor: Colors.grey.shade700,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 14,
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        'Batal',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+              child: Icon(Icons.warning_amber_rounded, color: Colors.red.shade500, size: 36),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Yakin Ingin Keluar?',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'Anda akan mengakhiri sesi admin ini dan kembali ke halaman utama publik.',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey, fontSize: 14),
+            ),
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.grey.shade100,
+                      foregroundColor: Colors.grey.shade700,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
+                    onPressed: () => Navigator.pop(context), // Batal
+                    child: const Text('Batal', style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
-
-                  const SizedBox(width: 12),
-
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red.shade500,
-                        foregroundColor: Colors.white,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 14,
-                        ),
-                      ),
-                      onPressed: () async {
-                        Navigator.pop(context);
-
-                        await _logout(context, ref);
-                      },
-                      child: const Text(
-                        'Ya, Keluar',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red.shade500,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      elevation: 0,
                     ),
+                    onPressed: () {
+                      Navigator.pop(context); // Tutup modal dialog dulu
+                      ref.read(authProvider.notifier).logout(); // Jalankan fungsi logout Riverpod
+                    },
+                    child: const Text('Ya, Keluar', style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Membaca path URL saat ini untuk menentukan menu mana yang sedang aktif
     final currentPath = GoRouterState.of(context).uri.path;
-
-    const primaryColor = Color(0xFF123524);
+    const primaryColor = Color(0xFF4A9F6A); // Warna hijau Tailwind dari kodemu
 
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
 
+      // HEADER KHUSUS HP (Otomatis punya tombol Hamburger Menu bawaan Scaffold)
       appBar: AppBar(
         backgroundColor: Colors.white,
         foregroundColor: Colors.black87,
-        elevation: 0.5,
+        elevation: 0.5, // Shadow tipis (border-b)
         title: Row(
           children: [
-            Image.asset(
-              AppAssets.logoDesa,
-              height: 30,
-              width: 30,
-            ),
-
-            const SizedBox(width: 12),
-
-            const Text(
-              'Panel Admin',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            // Jika ada aset logo, uncomment ini:
+            // Image.asset('assets/images/logodesa.png', height: 30),
+            // const SizedBox(width: 12),
+            const Text('Panel Admin', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           ],
         ),
       ),
 
+      // SIDEBAR (Otomatis ditangani Scaffold sebagai Drawer)
       drawer: Drawer(
         backgroundColor: Colors.white,
         child: Column(
           children: [
+            // AREA LOGO & JUDUL (Header Drawer)
             Container(
-              padding: const EdgeInsets.only(
-                top: 50,
-                bottom: 20,
-                left: 20,
-                right: 20,
-              ),
+              padding: const EdgeInsets.only(top: 50, bottom: 20, left: 20, right: 20),
               decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: Colors.grey.shade200,
-                  ),
-                ),
+                border: Border(bottom: BorderSide(color: Colors.grey.shade200)),
               ),
               child: Row(
                 children: [
-                  Image.asset(
-                    AppAssets.logoDesa,
-                    width: 40,
-                    height: 40,
-                  ),
-
+                  Icon(Icons.dashboard_customize_rounded, color: primaryColor, size: 32),
                   const SizedBox(width: 12),
-
-                  const Expanded(
-                    child: Text(
-                      'Desa Sibarani',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
+                  const Text(
+                    'Desa Sibarani',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
+            DrawerHeader(
+              decoration: const BoxDecoration(color: Color(0xFF123524)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Image.asset(AppAssets.logoDesa, width: 48, height: 48),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Menu Admin',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w800,
                     ),
                   ),
+                  SizedBox(height: 6),
+                  Text(
+                    'Kelola konten dan statistik desa',
+                    style: TextStyle(color: Colors.white70),
+                  ),
                 ],
               ),
             ),
 
+            // AREA MENU UTAMA
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 12,
-                  horizontal: 16,
-                ),
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                 children: [
-                  _buildMenu(
-                    context,
-                    title: 'Dashboard',
-                    path: '/admin',
-                    icon: Icons.dashboard_rounded,
-                    currentPath: currentPath,
-                    primaryColor: primaryColor,
-                  ),
-
-                  _buildMenu(
-                    context,
-                    title: 'Infografis',
-                    path: '/admin/infografis',
-                    icon: Icons.pie_chart_rounded,
-                    currentPath: currentPath,
-                    primaryColor: primaryColor,
-                  ),
-
-                  _buildMenu(
-                    context,
-                    title: 'Kegiatan Desa',
-                    path: '/admin/kegiatan',
-                    icon: Icons.local_activity_rounded,
-                    currentPath: currentPath,
-                    primaryColor: primaryColor,
-                  ),
-
-                  _buildMenu(
-                    context,
-                    title: 'Berita',
-                    path: '/admin/berita',
-                    icon: Icons.article_rounded,
-                    currentPath: currentPath,
-                    primaryColor: primaryColor,
-                  ),
-
-                  _buildMenu(
-                    context,
-                    title: 'APBDes',
-                    path: '/admin/apbdes',
-                    icon: Icons.account_balance_wallet_rounded,
-                    currentPath: currentPath,
-                    primaryColor: primaryColor,
-                  ),
-
-                  _buildMenu(
-                    context,
-                    title: 'PPID',
-                    path: '/admin/ppid',
-                    icon: Icons.folder_copy_rounded,
-                    currentPath: currentPath,
-                    primaryColor: primaryColor,
-                  ),
-
-                  _buildMenu(
-                    context,
-                    title: 'IDM',
-                    path: '/admin/idm',
-                    icon: Icons.bar_chart_rounded,
-                    currentPath: currentPath,
-                    primaryColor: primaryColor,
-                  ),
+                  _buildMenu(context, title: 'Dashboard', path: '/admin', icon: Icons.home_rounded, currentPath: currentPath, primaryColor: primaryColor),
+                  _buildMenu(context, title: 'Infografis', path: '/admin/infografis', icon: Icons.pie_chart_rounded, currentPath: currentPath, primaryColor: primaryColor),
+                  _buildMenu(context, title: 'Kegiatan Desa', path: '/admin/kegiatan', icon: Icons.local_activity_rounded, currentPath: currentPath, primaryColor: primaryColor),
+                  _buildMenu(context, title: 'Berita', path: '/admin/berita', icon: Icons.article_rounded, currentPath: currentPath, primaryColor: primaryColor),
+                  _buildMenu(context, title: 'APBDes', path: '/admin/apbdes', icon: Icons.account_balance_wallet_rounded, currentPath: currentPath, primaryColor: primaryColor),
+                  _buildMenu(context, title: 'PPID', path: '/admin/ppid', icon: Icons.star_rounded, currentPath: currentPath, primaryColor: primaryColor),
+                  _buildMenu(context, title: 'IDM', path: '/admin/idm', icon: Icons.add_circle_rounded, currentPath: currentPath, primaryColor: primaryColor),
                 ],
               ),
             ),
 
+            // AREA PROFIL USER (Bagian Bawah)
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: Colors.grey.shade50,
-                border: Border(
-                  top: BorderSide(
-                    color: Colors.grey.shade200,
-                  ),
-                ),
+                border: Border(top: BorderSide(color: Colors.grey.shade200)),
               ),
               child: Row(
                 children: [
+                  // Avatar
                   const CircleAvatar(
                     radius: 20,
                     backgroundColor: primaryColor,
-                    child: Icon(
-                      Icons.person,
-                      color: Colors.white,
-                    ),
+                    child: Icon(Icons.person, color: Colors.white),
                   ),
-
                   const SizedBox(width: 12),
-
+                  // Info Teks
                   const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          'Admin Desa',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          'admin@sibarani.desa.id',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                        ),
+                        Text('Admin Desa', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black87)),
+                        Text('admin@sibarani.desa.id', style: TextStyle(fontSize: 12, color: Colors.grey)),
                       ],
                     ),
                   ),
-
+                  // Tombol Logout
                   IconButton(
-                    tooltip: 'Logout',
-                    icon: Icon(
-                      Icons.logout_rounded,
-                      color: Colors.red.shade400,
-                    ),
-                    onPressed: () {
-                      _showLogoutModal(context, ref);
-                    },
+                    icon: Icon(Icons.logout_rounded, color: Colors.red.shade400),
+                    tooltip: 'Keluar dari Panel Admin',
+                    onPressed: () => _showLogoutModal(context, ref),
                   ),
                 ],
               ),
+            _AdminMenuTile(
+              icon: Icons.bar_chart_rounded,
+              title: 'Kelola IDM',
+              selected: location == '/admin/idm',
+              onTap: () => context.go('/admin/idm'),
+            ),
+            _AdminMenuTile(
+              icon: Icons.article_rounded,
+              title: 'Kelola Berita',
+              selected: location == '/admin/berita',
+              onTap: () => context.go('/admin/berita'),
+            ),
+            _AdminMenuTile(
+              icon: Icons.folder_copy_rounded,
+              title: 'Kelola PPID',
+              selected: location == '/admin/ppid',
+              onTap: () => context.go('/admin/ppid'),
+            ),
+            const Divider(height: 24),
+            ListTile(
+              leading: const Icon(Icons.logout_rounded, color: Colors.red),
+              title: const Text('Logout'),
+              onTap: logout,
             ),
           ],
         ),
       ),
 
+      // KONTEN UTAMA (Outlet)
       body: child,
     );
   }
 
+  // Fungsi Pembantu untuk membuat tombol menu Sidebar yang elegan
   Widget _buildMenu(
-    BuildContext context, {
-    required String title,
-    required String path,
-    required IconData icon,
-    required String currentPath,
-    required Color primaryColor,
-  }) {
+      BuildContext context, {
+        required String title,
+        required String path,
+        required IconData icon,
+        required String currentPath,
+        required Color primaryColor,
+      }) {
+    // Mengecek apakah menu ini sedang aktif
     final isActive = currentPath == path;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 4),
       child: ListTile(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        tileColor: isActive
-            ? primaryColor
-            : Colors.transparent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        tileColor: isActive ? primaryColor : Colors.transparent,
         leading: Icon(
           icon,
-          color: isActive
-              ? Colors.white
-              : Colors.grey.shade500,
+          color: isActive ? Colors.white : Colors.grey.shade500,
         ),
         title: Text(
           title,
           style: TextStyle(
-            fontWeight: isActive
-                ? FontWeight.bold
-                : FontWeight.w600,
-            color: isActive
-                ? Colors.white
-                : Colors.grey.shade700,
+            fontWeight: isActive ? FontWeight.bold : FontWeight.w600,
+            color: isActive ? Colors.white : Colors.grey.shade600,
           ),
         ),
         onTap: () {
-          Navigator.pop(context);
-
-          context.go(path);
+          Navigator.pop(context); // Tutup sidebar drawer
+          context.go(path);       // Pindah halaman
         },
       ),
     );
