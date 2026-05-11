@@ -12,10 +12,14 @@ import '../../shared/layouts/admin_layout.dart';
 
 // --- SCREENS ---
 import '../../features/public/beranda/screens/beranda_screen.dart';
+import '../../presentation/screens/admin/berita_admin_screen.dart';
 import '../../features/public/kegiatan/screens/kegiatan_screen.dart';
 import '../../features/public/idm/screens/idm_screen.dart';
+import '../../presentation/screens/admin/ppid_admin_screen.dart';
 import '../../features/public/apbdes/presentation/screens/apbdes_list_screen.dart';
 import '../../features/public/apbdes/presentation/screens/apbdes_detail_screen.dart';
+import '../../presentation/screens/public/galeri_public_screen.dart';
+import '../../presentation/screens/public/ppid_public_screen.dart';
 import '../../features/public/berita/screens/berita_screen.dart';
 import '../../features/public/berita/screens/berita_detail_screen.dart';
 import '../../features/public/profil/screens/profil_screen.dart';
@@ -65,6 +69,14 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const IdmScreen(),
           ),
 
+                    GoRoute(
+            path: '/ppid',
+            builder: (context, state) => const PpidPublicScreen(),
+          ),
+          GoRoute(
+            path: '/galeri',
+            builder: (context, state) => const GaleriPublicScreen(),
+          ),
 
           GoRoute(
             path: '/profil',
@@ -170,7 +182,18 @@ final routerProvider = Provider<GoRouter>((ref) {
               ),
             ),
           ),
-          // TODO: Tim Admin menambahkan rute lain di sini (misal: /admin/berita, /admin/idm)
+          GoRoute(
+            path: '/admin/idm',
+            builder: (context, state) => const IdmAdminScreen(),
+          ),
+          GoRoute(
+            path: '/admin/berita',
+            builder: (context, state) => const BeritaAdminScreen(),
+          ),
+          GoRoute(
+            path: '/admin/ppid',
+            builder: (context, state) => const PpidAdminScreen(),
+          ),
         ],
       ),
     ],

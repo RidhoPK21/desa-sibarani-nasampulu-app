@@ -16,7 +16,7 @@ class ApiClient {
     String baseUrl;
 
     if (kIsWeb) {
-      baseUrl = 'http://127.0.0.1:9000/api'; // Chrome / Web
+      baseUrl = 'http://localhost:9000/api'; // Chrome / Web
     } else if (Platform.isAndroid) {
       baseUrl = 'http://10.0.2.2:9000/api'; // Emulator Android
     } else {
