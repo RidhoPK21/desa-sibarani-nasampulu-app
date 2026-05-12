@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import 'package:intl/intl.dart';
+=======
+// lib/features/public/apbdes/data/models/apbdes_model.dart
+>>>>>>> origin/apbdes-iel
 
 class PelaksanaanModel {
   final String pendapatan;
@@ -25,8 +29,12 @@ class ItemKeuanganModel {
 class ApbdesModel {
   final String id;
   final String tahun;
+<<<<<<< HEAD
   final int versi;
   final String imageUrl; // Akan diisi default
+=======
+  final String imageUrl;
+>>>>>>> origin/apbdes-iel
   final String tanggal;
   final String jam;
   final String lokasi;
@@ -39,7 +47,10 @@ class ApbdesModel {
   ApbdesModel({
     required this.id,
     required this.tahun,
+<<<<<<< HEAD
     required this.versi,
+=======
+>>>>>>> origin/apbdes-iel
     required this.imageUrl,
     required this.tanggal,
     required this.jam,
@@ -50,6 +61,7 @@ class ApbdesModel {
     required this.pembiayaan,
     this.catatanPerubahan,
   });
+<<<<<<< HEAD
 
   factory ApbdesModel.fromJson(Map<String, dynamic> json) {
     // 1. Fungsi Bantuan untuk Format Rupiah
@@ -143,4 +155,6 @@ class ApbdesModel {
       ],
     );
   }
+=======
+>>>>>>> origin/apbdes-iel
 }
