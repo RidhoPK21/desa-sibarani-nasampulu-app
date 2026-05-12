@@ -12,19 +12,12 @@ import '../../shared/layouts/admin_layout.dart';
 
 // --- SCREENS ---
 import '../../features/public/beranda/screens/beranda_screen.dart';
-import '../../presentation/screens/admin/berita_admin_screen.dart';
-import '../../features/public/kegiatan/screens/kegiatan_screen.dart';
-import '../../features/public/idm/screens/idm_screen.dart';
-import '../../presentation/screens/admin/ppid_admin_screen.dart';
-import '../../features/public/apbdes/presentation/screens/apbdes_list_screen.dart';
-import '../../features/public/apbdes/presentation/screens/apbdes_detail_screen.dart';
-import '../../presentation/screens/public/galeri_public_screen.dart';
-import '../../presentation/screens/public/ppid_public_screen.dart';
-import '../../features/public/berita/screens/berita_screen.dart';
-import '../../features/public/berita/screens/berita_detail_screen.dart';
-import '../../features/public/profil/screens/profil_screen.dart';
-import '../../features/public/infografis/screens/infografis_publik_screen.dart';
-// Keys untuk memisahkan tumpukan navigasi agar tidak saling tumpang tindih
+import '../../presentation/screens/admin/idm_admin_screen.dart';
+import '../../presentation/screens/auth/login_screen.dart';
+import '../../presentation/screens/idm/idm_screen.dart';
+import '../../shared/layouts/admin_layout.dart';
+import '../../shared/layouts/public_layout.dart';
+
 final rootNavigatorKey = GlobalKey<NavigatorState>();
 final publicShellKey = GlobalKey<NavigatorState>();
 final adminShellKey = GlobalKey<NavigatorState>();
@@ -185,14 +178,6 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/admin/idm',
             builder: (context, state) => const IdmAdminScreen(),
-          ),
-          GoRoute(
-            path: '/admin/berita',
-            builder: (context, state) => const BeritaAdminScreen(),
-          ),
-          GoRoute(
-            path: '/admin/ppid',
-            builder: (context, state) => const PpidAdminScreen(),
           ),
         ],
       ),

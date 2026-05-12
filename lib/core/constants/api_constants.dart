@@ -31,6 +31,7 @@ class ApiConstants {
   static String get galeri => kegiatan;
   static String get ppid => dokumen;
   static String get layanan => '$contentBase/layanan';
+  static String get kegiatan => '$contentBase/kegiatan';
 
   static Map<String, String> get defaultHeaders => {
     'Content-Type': 'application/json',
