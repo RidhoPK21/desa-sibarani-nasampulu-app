@@ -91,19 +91,32 @@ class _NavbarState extends State<Navbar> {
                                 borderRadius: BorderRadius.circular(8),
                                 child: Row(
                                   children: [
-                                    Container(
-                                      width: 40,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white.withValues(
-                                          alpha: 0.15,
+                                    // BUNGKUS DENGAN SECRET LOGIN TRIGGER
+                                    SecretLoginTrigger(
+                                      child: Container(
+                                        width: 42,
+                                        height: 42,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(8),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black.withOpacity(0.1),
+                                              blurRadius: 4,
+                                              offset: const Offset(0, 2),
+                                            ),
+                                          ],
                                         ),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: const Icon(
-                                        Icons.location_city_rounded,
-                                        color: Colors.white,
-                                        size: 22,
+                                        clipBehavior: Clip.antiAlias,
+                                        child: Image.asset(
+                                          'logoDesa.jpg', // Pastikan nama dan foldernya benar
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (context, error, stackTrace) => const Icon(
+                                            Icons.shield,
+                                            color: Color(0xFF4EA674),
+                                            size: 24,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(width: 10),
@@ -360,6 +373,47 @@ class _MobileLink extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+// ── WIDGET PINTU RAHASIA (SILUMAN) ──
+class SecretLoginTrigger extends StatefulWidget {
+  final Widget child;
+  const SecretLoginTrigger({super.key, required this.child});
+
+  @override
+  State<SecretLoginTrigger> createState() => _SecretLoginTriggerState();
+}
+
+class _SecretLoginTriggerState extends State<SecretLoginTrigger> {
+  int _tapCount = 0;
+  DateTime? _lastTap;
+
+  void _handlePointerDown(PointerDownEvent event) {
+    final now = DateTime.now();
+    // Reset hitungan jika jeda lebih dari 500 milidetik
+    if (_lastTap == null || now.difference(_lastTap!) > const Duration(milliseconds: 500)) {
+      _tapCount = 1;
+    } else {
+      _tapCount++;
+    }
+    _lastTap = now;
+
+    // Jika ketukan mencapai 3, langsung teleportasi ke Login!
+    if (_tapCount == 3) {
+      _tapCount = 0; // Reset
+      context.go('/login');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Listener tidak memblokir efek klik dari InkWell milik Navbar
+    return Listener(
+      onPointerDown: _handlePointerDown,
+      behavior: HitTestBehavior.translucent,
+      child: widget.child,
     );
   }
 }

@@ -53,7 +53,7 @@ class BeritaScreen extends ConsumerWidget {
                           final berita = list[index];
                           return BeritaCard(
                             berita: berita,
-                            // 🔥 Navigasi menggunakan GoRouter
+                            //  Navigasi menggunakan GoRouter
                             onTap: () => context.push('/berita/${berita.id}'),
                           );
                         },

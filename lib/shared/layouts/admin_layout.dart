@@ -64,9 +64,14 @@ class AdminLayout extends ConsumerWidget {
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       elevation: 0,
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       Navigator.pop(context); // Tutup modal dialog dulu
-                      ref.read(authProvider.notifier).logout(); // Jalankan fungsi logout Riverpod
+                      await ref.read(authProvider.notifier).logout(); // Hapus token di background
+
+                      // Tendang user kembali ke halaman Beranda Publik
+                      if (context.mounted) {
+                        context.go('/');
+                      }
                     },
                     child: const Text('Ya, Keluar', style: TextStyle(fontWeight: FontWeight.bold)),
                   ),

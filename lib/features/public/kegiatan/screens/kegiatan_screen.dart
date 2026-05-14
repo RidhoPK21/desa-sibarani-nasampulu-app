@@ -7,7 +7,7 @@ import 'package:dio/dio.dart';
 
 import '../../../../core/network/api_client.dart';
 
-// 🔥 KELAS PENYELAMAT: Pengganti AppColors yang hilang
+//  KELAS PENYELAMAT: Pengganti AppColors yang hilang
 class AppColors {
   static const Color primary = Color(0xFF4EA674);
   static const Color primarySurface = Color(0xFFE8F5E9);
@@ -36,7 +36,7 @@ class KegiatanModel {
 
   factory KegiatanModel.fromJson(Map<String, dynamic> json) => KegiatanModel(
     id: '${json['id'] ?? ''}',
-    // 🔥 Menggunakan key dari Laravel
+    //  Menggunakan key dari Laravel
     judul: json['judul_kegiatan'] ?? json['judul'] ?? json['nama'] ?? 'Tanpa Judul',
     keterangan: json['deskripsi_kegiatan'] ?? json['keterangan'] ?? json['deskripsi'] ?? '',
     gambar: json['gambar_url'] ?? json['gambar'],
@@ -233,7 +233,7 @@ class _DaftarKegiatanTabState extends State<_DaftarKegiatanTab>
       _error = null;
     });
     try {
-      // 🔥 Menembak 1 URL Utama
+      //  Menembak 1 URL Utama
       final response = await api.get('/info/kegiatan');
       final list = _extractList(response.data);
       if (!mounted) return;
@@ -241,7 +241,7 @@ class _DaftarKegiatanTabState extends State<_DaftarKegiatanTab>
       setState(() {
         _items = list
             .whereType<Map>()
-        // 🔥 Memfilter hanya untuk Tab Kegiatan
+        //  Memfilter hanya untuk Tab Kegiatan
             .where((e) => e['jenis_kegiatan'] == 'kegiatan kerja')
             .map((e) => KegiatanModel.fromJson(Map<String, dynamic>.from(e)))
             .toList();
@@ -324,14 +324,14 @@ class _DaftarProgramKerjaTabState extends State<_DaftarProgramKerjaTab>
       _error = null;
     });
     try {
-      // 🔥 Menembak 1 URL Utama
+      //  Menembak 1 URL Utama
       final response = await api.get('/info/kegiatan');
       final list = _extractList(response.data);
       if (!mounted) return;
       setState(() {
         _items = list
             .whereType<Map>()
-        // 🔥 Memfilter hanya untuk Tab Program Kerja
+        //  Memfilter hanya untuk Tab Program Kerja
             .where((e) => e['jenis_kegiatan'] == 'program kerja')
             .map((e) => ProgramKerjaModel.fromJson(Map<String, dynamic>.from(e)))
             .toList();
@@ -415,14 +415,14 @@ class _DaftarBantuanSosialTabState extends State<_DaftarBantuanSosialTab>
       _error = null;
     });
     try {
-      // 🔥 Menembak 1 URL Utama
+      //  Menembak 1 URL Utama
       final response = await api.get('/info/kegiatan');
       final list = _extractList(response.data);
       if (!mounted) return;
       setState(() {
         _items = list
             .whereType<Map>()
-        // 🔥 Memfilter hanya untuk Tab Bantuan Sosial
+        //  Memfilter hanya untuk Tab Bantuan Sosial
             .where((e) => e['jenis_kegiatan'] == 'bantuan sosial')
             .map((e) => BantuanSosialModel.fromJson(Map<String, dynamic>.from(e)))
             .toList();
@@ -1167,7 +1167,7 @@ String _formatTanggal(String raw) {
   }
 }
 
-// 🔥 Fungsi Sakti untuk Menjinakkan Gambar dari Localhost Laravel
+//  Fungsi Sakti untuk Menjinakkan Gambar dari Localhost Laravel
 String _formatImageUrl(String? url) {
   if (url == null || url.isEmpty) return '';
 

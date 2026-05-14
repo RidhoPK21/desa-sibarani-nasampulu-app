@@ -1,5 +1,3 @@
-// lib/features/public/apbdes/presentation/screens/apbdes_list_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -13,24 +11,28 @@ class ApbdesListScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final apbdesAsync = ref.watch(apbdesListProvider);
 
+    // 🔥 Taktik Intelijen: Seragamkan dengan warna ProfilScreen
+    const primaryGreen = Color(0xFF57A677);
+    const textGreen = Color(0xFF4EA674);
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: Colors.grey[50], // Background yang konsisten dengan Profil
       appBar: AppBar(
         title: const Text(
-          'APBDes',
+          'Transparansi APBDes',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: 18,
           ),
         ),
-        backgroundColor: const Color(0xFF2E7D32),
+        backgroundColor: primaryGreen,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: apbdesAsync.when(
         loading: () => const Center(
-          child: CircularProgressIndicator(color: Color(0xFF2E7D32)),
+          child: CircularProgressIndicator(color: primaryGreen),
         ),
         error: (e, _) => Center(
           child: Column(
@@ -47,30 +49,46 @@ class ApbdesListScreen extends ConsumerWidget {
           ),
         ),
         data: (list) => SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(24), // Padding diperlebar agar lebih elegan
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'APBDes',
+                'Data APBDes',
                 style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  fontSize: 24, // Judul diperbesar agar serasi dengan Profil
+                  fontWeight: FontWeight.w900,
+                  color: textGreen,
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 6),
               const Text(
-                'Anggaran Pendapatan dan Belanja Desa',
-                style: TextStyle(fontSize: 13, color: Colors.grey),
+                'Anggaran Pendapatan dan Belanja Desa Sibarani Nasampulu',
+                style: TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w500),
               ),
-              const SizedBox(height: 16),
-              ...list.map(
-                    (apbdes) => ApbdesCard(
-                  apbdes: apbdes,
+              const SizedBox(height: 24),
+
+              // Handle jika data kosong
+              if (list.isEmpty)
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 40),
+                    child: Text(
+                      "Data APBDes belum tersedia.",
+                      style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
+                    ),
+                  ),
+                )
+              else
+                ...list.map(
+                      (apbdes) => Padding(
+                    padding: const EdgeInsets.only(bottom: 16.0), // Jarak antar card dipertegas
+                    child: ApbdesCard(
+                      apbdes: apbdes,
                       onTap: () => context.push('/apb-desa/${apbdes.id}'),
+                    ),
+                  ),
                 ),
-              ),
             ],
           ),
         ),

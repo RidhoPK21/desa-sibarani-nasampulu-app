@@ -6,13 +6,12 @@ final secureStorage = const FlutterSecureStorage();
 
 // 2. Class Satpam versi Riverpod 3 (Menggunakan Notifier)
 class AuthNotifier extends Notifier<bool> {
-
   // Fungsi build() adalah pengganti super() di versi lama.
   // Fungsi ini wajib ada untuk menentukan nilai awal state.
   @override
   bool build() {
     checkLoginStatus(); // Cek token di background saat aplikasi pertama kali jalan
-    return false;       // Nilai default awal: false (belum login)
+    return false; // Nilai default awal: false (belum login)
   }
 
   // Cek brankas untuk memastikan sesi

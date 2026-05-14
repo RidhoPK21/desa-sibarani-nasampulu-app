@@ -64,7 +64,7 @@ class IdmScreen extends ConsumerWidget {
               background: Stack(
                 fit: StackFit.expand,
                 children: [
-                  // 🔥 Gambar error 404 dihapus, diganti dengan warna solid bawaan
+                  //  Gambar error 404 dihapus, diganti dengan warna solid bawaan
                   Container(color: primaryColor),
 
                   // Teks Judul
@@ -165,7 +165,7 @@ class IdmScreen extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(color: Colors.grey.shade300),
                         ),
-                        // 🔥 SingleChildScrollView agar tabel tidak kepotong di HP (bisa digeser ke samping)
+                        //  SingleChildScrollView agar tabel tidak kepotong di HP (bisa digeser ke samping)
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: DataTable(

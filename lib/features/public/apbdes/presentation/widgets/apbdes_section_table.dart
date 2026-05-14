@@ -12,7 +12,8 @@ class ApbdesSectionTable extends StatelessWidget {
     super.key,
     required this.title,
     required this.items,
-    this.headerColor = const Color(0xFF2E7D32),
+    // 🔥 Taktik Intelijen: Ubah warna default menjadi Emerald/Teal kita
+    this.headerColor = const Color(0xFF57A677),
   });
 
   @override
@@ -21,24 +22,24 @@ class ApbdesSectionTable extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16), // 🔥 Dibuat lebih membulat (16)
+        border: Border.all(color: Colors.grey.shade100), // Tambahan border halus
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 6,
+            color: Colors.black.withOpacity(0.03), // 🔥 Shadow lebih lembut & modern
+            blurRadius: 10,
             offset: const Offset(0, 2),
           ),
         ],
       ),
       child: Column(
         children: [
-          // Header
+          // Header Tabel
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             decoration: BoxDecoration(
-              color: headerColor.withOpacity(0.08),
-              borderRadius:
-              const BorderRadius.vertical(top: Radius.circular(12)),
+              color: headerColor.withOpacity(0.1), // Opacity warna header lebih segar
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -46,23 +47,23 @@ class ApbdesSectionTable extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: headerColor,
+                    fontWeight: FontWeight.w900,
+                    color: headerColor.withOpacity(0.9), // Warna solid elegan
                     fontSize: 16,
                   ),
                 ),
                 Text(
                   'TOTAL',
                   style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: headerColor,
+                    fontWeight: FontWeight.w900,
+                    color: headerColor.withOpacity(0.9),
                     fontSize: 14,
                   ),
                 ),
               ],
             ),
           ),
-          // Items
+          // Items Tabel
           ...items.asMap().entries.map((entry) {
             final index = entry.key;
             final item = entry.value;
@@ -70,8 +71,8 @@ class ApbdesSectionTable extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
+                    horizontal: 20,
+                    vertical: 14,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -82,7 +83,8 @@ class ApbdesSectionTable extends StatelessWidget {
                           '${item.nama} :',
                           style: const TextStyle(
                             fontSize: 13,
-                            color: Colors.black87,
+                            color: Colors.black54, // Warna teks abu-abu elegan
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
@@ -90,8 +92,8 @@ class ApbdesSectionTable extends StatelessWidget {
                       Text(
                         item.jumlah,
                         style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 14, // Angka diperbesar sedikit
+                          fontWeight: FontWeight.w700,
                           color: Colors.black87,
                         ),
                       ),
@@ -101,14 +103,14 @@ class ApbdesSectionTable extends StatelessWidget {
                 if (index < items.length - 1)
                   Divider(
                     height: 1,
-                    color: Colors.grey.shade200,
-                    indent: 16,
-                    endIndent: 16,
+                    color: Colors.grey.shade100, // Garis pembatas sangat halus
+                    indent: 20,
+                    endIndent: 20,
                   ),
               ],
             );
           }),
-          const SizedBox(height: 4),
+          const SizedBox(height: 8),
         ],
       ),
     );

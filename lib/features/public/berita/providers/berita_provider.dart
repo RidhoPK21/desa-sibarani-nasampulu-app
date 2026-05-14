@@ -14,7 +14,7 @@ class BeritaNotifier extends AsyncNotifier<List<BeritaModel>> {
 
   Future<List<BeritaModel>> _fetchData() async {
     try {
-      // 🔥 Menembak endpoint Publik
+      //  Menembak endpoint Publik
       final response = await api.get('/info/berita');
 
       final data = response.data['data'];
