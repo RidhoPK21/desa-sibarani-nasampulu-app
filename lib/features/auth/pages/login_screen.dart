@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:dio/dio.dart';
+
+// PASTIKAN path import ini sesuai dengan folder di proyekmu!
+import '../../../core/network/api_client.dart';
 import '../providers/auth_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -12,28 +16,83 @@ class LoginScreen extends ConsumerStatefulWidget {
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _usernameController = TextEditingController();
+  final _emailController = TextEditingController(); // TAMBAHAN: Controller Email
   final _passwordController = TextEditingController();
+
   bool _isPasswordVisible = false;
+  bool _isLoading = false;
 
   @override
   void dispose() {
     _usernameController.dispose();
+    _emailController.dispose(); // Jangan lupa dibuang
     _passwordController.dispose();
     super.dispose();
   }
 
-  void _handleLogin() async {
-    // Simulasi Login
-    await ref.read(authProvider.notifier).login("dummy_session_token");
-    if (mounted) {
-      context.go('/admin');
+  Future<void> _handleLogin() async {
+    final username = _usernameController.text.trim();
+    final email = _emailController.text.trim(); // Ambil data email
+    final password = _passwordController.text;
+
+    // Validasi 3 Input Kosong
+    if (username.isEmpty || email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Semua kolom (Username, Email, Password) wajib diisi!')),
+      );
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      // TEMBAK API!
+      // Karena kita sudah tahu rute resminya dari React adalah /auth/portal-pemdes
+      // Pastikan api_client.dart kamu baseUrl-nya adalah: 'http://127.0.0.1:9000/api'
+      final response = await api.post('/auth/portal-pemdes', data: {
+        'username': username,
+        'email': email,       // TAMBAHAN: Kirim email ke server
+        'password': password,
+      });
+
+      final token = response.data['token'] ?? response.data['data']?['token'];
+
+      if (token != null) {
+        await ref.read(authProvider.notifier).login(token);
+        if (mounted) {
+          context.go('/admin');
+        }
+      } else {
+        throw Exception("Token tidak ditemukan dalam respons server.");
+      }
+    } catch (e) {
+      if (mounted) {
+        String errorMessage = 'Terjadi kesalahan saat login.';
+
+        if (e.toString().contains('401')) {
+          errorMessage = 'Username, email, atau password salah!';
+        } else if (e.toString().contains('422')) {
+          errorMessage = 'Format input tidak valid. Periksa kembali email Anda.';
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     const primaryGreen = Color(0xFF5BAA7B);
-    const darkGreen = Color(0xFF2E7D32);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -43,7 +102,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           child: Column(
             children: [
               const SizedBox(height: 50),
-              // --- JUDUL ATAS ---
+
               const Text(
                 "SISTEM INFORMASI DESA\nSIBARANI NASAMPULU",
                 textAlign: TextAlign.center,
@@ -56,22 +115,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               ),
               const SizedBox(height: 40),
 
-              // --- LOGO ---
               Image.asset(
-                'assets/logo-toba.jpg',
-                height: 180,
+                'logoDesa.jpg', // Sesuaikan nama logo
+                height: 150,
                 errorBuilder: (context, error, stackTrace) =>
-                    const Icon(Icons.account_balance, size: 120, color: primaryGreen),
+                const Icon(Icons.account_balance, size: 120, color: primaryGreen),
               ),
-
               const SizedBox(height: 30),
 
-              // --- TEKS LOGIN ---
               const Text(
-                "Login",
+                "Masuk ke Akun Anda",
                 style: TextStyle(
                   color: Color(0xFF00695C),
-                  fontSize: 26,
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -80,25 +136,28 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               // --- INPUT USERNAME ---
               TextField(
                 controller: _usernameController,
+                textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
                   hintText: 'Username',
-                  hintStyle: const TextStyle(color: Colors.black26),
-                  prefixIcon: const Icon(Icons.account_circle, color: primaryGreen, size: 35),
+                  prefixIcon: const Icon(Icons.person, color: primaryGreen),
                   filled: true,
                   fillColor: Colors.white,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(40),
-                    borderSide: const BorderSide(color: Color(0xFFEEEEEE)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(40),
-                    borderSide: const BorderSide(color: Color(0xFFEEEEEE)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(40),
-                    borderSide: const BorderSide(color: primaryGreen),
-                  ),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // --- INPUT EMAIL (BARU) ---
+              TextField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
+                decoration: InputDecoration(
+                  hintText: 'Email',
+                  prefixIcon: const Icon(Icons.email, color: primaryGreen),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
                 ),
               ),
               const SizedBox(height: 20),
@@ -107,40 +166,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               TextField(
                 controller: _passwordController,
                 obscureText: !_isPasswordVisible,
+                textInputAction: TextInputAction.done,
+                onSubmitted: (_) => _handleLogin(),
                 decoration: InputDecoration(
                   hintText: 'Password',
-                  hintStyle: const TextStyle(color: Colors.black26),
-                  prefixIcon: const Icon(Icons.lock, color: primaryGreen, size: 30),
-                  suffixIcon: Padding(
-                    padding: const EdgeInsets.only(right: 15),
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.visibility,
-                        color: Colors.grey.shade300,
-                        size: 25,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _isPasswordVisible = !_isPasswordVisible;
-                        });
-                      },
+                  prefixIcon: const Icon(Icons.lock, color: primaryGreen),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _isPasswordVisible ? Icons.visibility_off : Icons.visibility,
+                      color: Colors.grey,
                     ),
+                    onPressed: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
                   ),
                   filled: true,
                   fillColor: Colors.white,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(40),
-                    borderSide: const BorderSide(color: Color(0xFFEEEEEE)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(40),
-                    borderSide: const BorderSide(color: Color(0xFFEEEEEE)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(40),
-                    borderSide: const BorderSide(color: primaryGreen),
-                  ),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
                 ),
               ),
               const SizedBox(height: 30),
@@ -148,38 +188,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               // --- TOMBOL LOGIN ---
               SizedBox(
                 width: double.infinity,
-                height: 65,
+                height: 55,
                 child: ElevatedButton(
-                  onPressed: _handleLogin,
+                  onPressed: _isLoading ? null : _handleLogin,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryGreen,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(35),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: const Text(
-                    "Login",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
+                      borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // --- LUPA PASSWORD ---
-              TextButton(
-                onPressed: () {},
-                child: const Text(
-                  "Lupa Password?",
-                  style: TextStyle(
-                    color: Color(0xFF8DC6A6),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  child: _isLoading
+                      ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                      : const Text("Masuk", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
                 ),
               ),
             ],
