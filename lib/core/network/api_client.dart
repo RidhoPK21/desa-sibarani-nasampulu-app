@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter/foundation.dart'; // 🔥 TAMBAHKAN INI UNTUK MENDETEKSI WEB
+import 'package:flutter/foundation.dart';
 
 class ApiClient {
   static final ApiClient _instance = ApiClient._internal();
@@ -15,7 +15,6 @@ class ApiClient {
   ApiClient._internal() {
     String baseUrl;
 
-    // 🔥 LOGIKA BARU: Cek apakah jalan di Web, Android, atau iOS
     if (kIsWeb) {
       baseUrl = 'http://127.0.0.1:9000/api'; // Chrome / Web
     } else if (Platform.isAndroid) {
